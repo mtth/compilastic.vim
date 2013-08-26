@@ -1,0 +1,11 @@
+
+Ideas:
+
+Read compilation flags from last line in file
+Silent make (using system(...))
+Optionally load errors into location list
+Stream selection to compiler (when compiler allows it)
+View compiled file
+View compiler info (for flags)
+
+# compilastic: -o 
