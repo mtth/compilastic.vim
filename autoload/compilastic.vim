@@ -4,44 +4,27 @@ else
   let s:loaded = 1
 endif
 
+" Utility
 
-" State
-
-let g:compiled_filepaths = {}
-
-function! s:grow(elem) dict
-  let data = self.data
-  let position = match(data, '^' . a:elem . '$')
-  if position >=# 0
-    call add(data, remove(data, position))
+function! s:get_compiler()
+  " local compiler if set else global
+  if exists('b:current_compiler')
+    return b:current_compiler
+  elseif exists('current_compiler')
+    return current_compiler
   else
-    call add(data, a:elem)
+    return ''
   endif
 endfunction
 
-function! s:latest() dict
-  if len(self.data)
-    return self.data[len(self.data) - 1]
+function! s:get_makeprg()
+  " local or global makeprg
+  if strlen(&l:makeprg)
+    return &l:makeprg
   else
-    return ''
-  end
+    return &makeprg
+  endif
 endfunction
-
-function! s:full() dict
-  return self.data
-endfunction
-
-function! s:make_stack()
-  return {
-  \ 'data': [],
-  \ 'grow': function('s:grow'),
-  \ 'latest': function('s:latest'),
-  \ 'full': function('s:full')
-  \ }
-endfunction
-
-
-" Utility
 
 function! s:expand_all(input_string)
   " Perform command line expansion on string (i.e. % to filepath, etc.)
@@ -54,7 +37,6 @@ function! s:expand_all(input_string)
   \ )
   return substitute(input_string, '\\%', '%', 'g')
 endfunction
-
 
 " Flags
 
@@ -69,8 +51,8 @@ function! s:get_modeline()
       endif
     endif
   endfor
-  if has_key(g:compilastic_default_flags, &l:makeprg)
-    return s:expand_all(g:compilastic_default_flags[&l:makeprg])
+  if has_key(g:compilastic_default_flags, s:get_compiler())
+    return s:expand_all(g:compilastic_default_flags[s:get_compiler()])
   else
     return ''
   endif
@@ -112,7 +94,6 @@ function! s:get_filepath()
   endif
 endfunction
 
-
 " Public functions
 
 function! compilastic#compile(flags, reset)
@@ -124,35 +105,37 @@ function! compilastic#compile(flags, reset)
     let flags = s:get_flags()
   endif
   let flags = s:expand_all(a:flags) . ' ' . flags
-  let output = system(&l:makeprg . ' ' . flags)
+  let output = system(s:get_makeprg() . ' ' . flags)
   redraw!
-  if v:shell_error
+  let status = v:shell_error
+  if status
     echoerr 'Compilation failed.' . output
   else
     echo 'Compilation successful!'
   endif
+  return status
 endfunction
 
-function! compilastic#info(makeprg)
-  " print information from compiler (defaults to current if non specified)
-  if strlen(a:makeprg)
-    let makeprg = a:makeprg
-  else
-    let makeprg = &l:makeprg
-  endif
+function! compilastic#info()
+  " print information from compiler
+  let makeprg = s:get_makeprg()
   if !strlen(makeprg)
     echoerr 'No compiler set.'
   elseif executable(split(makeprg)[0])
+    echo 'Current usage: ' . makeprg . ' ' . s:get_flags() . "\n\n"
     echo system(makeprg . ' --help')
-    if !strlen(a:makeprg)
-      echo 'Current usage: ' . &l:makeprg . ' ' . s:get_flags()
-    endif
   else
     echoerr 'Compiler not available: ' . makeprg
   endif
 endfunction
 
-function! compilastic#view()
+function! compilastic#view(refresh)
+  if a:refresh
+    let status = compilastic#compile('', 0)
+    if status
+      return
+    endif
+  endif
   let filepath = s:get_filepath()
   if strlen(filepath) && filereadable(filepath)
     let autoread_save = &autoread

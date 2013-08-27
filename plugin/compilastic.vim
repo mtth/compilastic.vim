@@ -1,15 +1,13 @@
-" Configuration
-
-if !exists('g:compilastic_use_location_list')
-  let g:compilastic_use_location_list = 1
+if exists('s:loaded') || &compatible
+  finish
+else
+  let s:loaded = 1
 endif
+
+" Configuration
 
 if !exists('g:compilastic_upper_limit')
   let g:compilastic_upper_limit = 5
-endif
-
-if !exists('g:compilastic_compile_on_write')
-  let g:compilastic_compile_on_write = 0
 endif
 
 if !exists('g:compilastic_mappings')
@@ -23,13 +21,13 @@ endif
 " Default compilation flags
 
 if !has_key(g:compilastic_default_flags, 'haml')
-  let g:compilastic_default_flags['haml'] = '% {%:t.html}'
+  let g:compilastic_default_flags['haml'] = '% {%:r.html}'
 endif
-if !has_key(g:compilastic_default_flags, 'coffee -c')
-  let g:compilastic_default_flags['coffee -c'] = '%'
+if !has_key(g:compilastic_default_flags, 'coffee')
+  let g:compilastic_default_flags['coffee'] = '%'
 endif
 if !has_key(g:compilastic_default_flags, 'haml-coffee')
-  let g:compilastic_default_flags['haml-coffee'] = '-i % -o {%:t.jst}'
+  let g:compilastic_default_flags['haml-coffee'] = '--input % --output {%:r.jst}'
 endif
 if !has_key(g:compilastic_default_flags, 'stylus')
   let g:compilastic_default_flags['stylus'] = '%'
@@ -38,12 +36,12 @@ endif
 " Commands
 
 command! -bang -nargs=* Compile call compilastic#compile(<q-args>, <bang>0)
-command! -nargs=? Cinfo call compilastic#info(<q-args>)
-command! -nargs=0 Cview call compilastic#view()
+command! -nargs=0 Cinfo call compilastic#info()
+command! -bang -nargs=0 Cview call compilastic#view(<bang>0)
 
 " Mappings
 
 if g:compilastic_mappings
   nnoremap gc :Compile<cr>
-  nnoremap gC :Cview<cr>
+  nnoremap gC :Cview!<cr>
 endif
