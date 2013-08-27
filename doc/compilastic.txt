@@ -1,11 +1,92 @@
+*compilastic.txt*   I compile, you compile.                             v1.0.0
+*Compilastic*
 
-Ideas:
+
+==============================================================================
+CONTENTS                                                 *CompilasticContents*
+
+    1. Intro .............................. |CompilasticIntro|
+    2. Commands ........................ |CompilasticCommands|
+      2.1 |:Compile|
+      2.2 |:Cinfo|
+      2.3 |:Cview|
+    3. Mappings ........................ |CompilasticMappings|
+    4. Configuration ..................... |CompilasticConfig|
+      4.1  |g:compilastic_highlight|
+      4.2  |g:compilastic_initial_mark|
+    5. Changes .......................... |CompilasticChanges|
+
+
+==============================================================================
+1. Intro                                                    *CompilasticIntro*
 
 Read compilation flags from last line in file
 Silent make (using system(...))
-Optionally load errors into location list
-Stream selection to compiler (when compiler allows it)
 View compiled file
 View compiler info (for flags)
 
-# compilastic: -o 
+# c: -o
+
+
+==============================================================================
+2. Commands                                              *CompilasticCommands*
+
+Compilastic provides the following three commands:
+
+------------------------------------------------------------------------------
+2.1 :Compile[!] [<flags>]                                           *:Compile*
+
+Compile file reading modeline to find options.
+If not present, uses defaults.
+
+------------------------------------------------------------------------------
+2.2 :Cinfo [<compiler>]                                               *:Cinfo*
+
+Display information about compiler options.
+
+------------------------------------------------------------------------------
+2.3 :Cview                                                            *:Cview*
+
+View compiled file.
+
+
+==============================================================================
+3. Mappings                                              *CompilasticMappings*
+
+
+These mappings can be disabled by setting the |g:compilastic_mappings| option 
+to 0.
+
+
+------------------------------------------------------------------------------
+                                                                          *gc*
+Compile file.
+
+------------------------------------------------------------------------------
+                                                                          *gC*
+Display compiled file.
+
+
+==============================================================================
+4. Configuration                                           *CompilasticConfig*
+
+You can tame Compilastic by changing the following options.
+
+
+------------------------------------------------------------------------------
+4.1 g:compilastic_default_flags                  *g:compilastic_default_flags*
+
+TODO.
+
+
+------------------------------------------------------------------------------
+4.2 g:compilastic_mappings                            *g:compilastic_mappings*
+
+TODO.
+
+
+==============================================================================
+5. Changes                                                *CompilasticChanges*
+
+v1.0.0 (?)
+  * Initial stable release.
