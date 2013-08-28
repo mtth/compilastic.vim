@@ -20,12 +20,10 @@ CONTENTS                                                 *CompilasticContents*
 ==============================================================================
 1. Intro                                                    *CompilasticIntro*
 
-Read compilation flags from last line in file
-Silent make (using system(...))
-View compiled file
-View compiler info (for flags)
-
-# c: -o
+Lisp, Lisp, Lisp Machine,
+Lisp Machine is Fun.
+Lisp, Lisp, Lisp Machine,
+Fun for everyone.
 
 
 ==============================================================================
@@ -38,9 +36,9 @@ Compilastic provides the following three commands:
 
 Compile file using current compiler and flags from the compilastic modeline. 
 The compilastic modeline has the following format:
-
+>
 <comment_string> c: <flags>
-
+<
 Compilastic performs command line expansion on <flags> (for example, you can 
 use %:h for the folder of the current file). To insert a literal %, prepend it 
 with a backslash.
@@ -85,14 +83,16 @@ View compiled file. With [!], recompile before viewing.
 These mappings can be disabled by setting the |g:compilastic_mappings| option 
 to 0.
 
-
 ------------------------------------------------------------------------------
                                                                           *gc*
 Compile file.
 
 ------------------------------------------------------------------------------
                                                                           *gC*
-Compile then display compiled file.
+Compile file then:
+
+* run compiled file if it is executable (e.g. when compiling C)
+* view compiled file otherwise (e.g. HAML)
 
 
 ==============================================================================

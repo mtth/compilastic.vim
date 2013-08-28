@@ -134,17 +134,22 @@ function! compilastic#run(arguments, refresh)
     let status = compilastic#compile('', 0)
     if status
       return
+    else
+      redraw!
     endif
   endif
   let filepath = s:get_filepath()
   if strlen(filepath)
     if executable(filepath)
       echo system(filepath . ' ' . a:arguments)
+      if v:shell_error
+        echoerr 'Non-zero return value for ' . filepath . ': ' . v:shell_error
+      endif
     else
-      echoerr 'Compiled file is not executable.'
+      echoerr 'Compiled file ' . filepath . ' is not executable.'
     endif
   else
-    echoerr 'Unable to find compiled executable.'
+    echoerr 'Unable to find compiled executable at ' . filepath
   endif
 endfunction
 
@@ -167,29 +172,23 @@ function! compilastic#view(prog, refresh)
       let &autoread = autoread_save
     endif
   else
-    echoerr 'Unable to find compiled file.'
+    echoerr 'Unable to find compiled file at ' . filepath
   endif
 endfunction
 
 function! compilastic#run_or_view()
   " refresh then run if executable else open in vim
-  let status = compilastic#compile('', 0)
-  if status
+  if compilastic#compile('', 0)
     return
-  else
-    redraw!
   endif
   let filepath = s:get_filepath()
   if strlen(filepath)
     if executable(filepath)
-      echo system(filepath)
+      call compilastic#run('', 0)
     else
-      let autoread_save = &autoread
-      let &autoread = 1
-      execute 'edit ' . filepath
-      let &autoread = autoread_save
+      call compilastic#view('', 0)
     endif
   else
-    echoerr 'Unable to find compiled file.'
+    echoerr 'Unable to find compiled file at ' . filepath
   endif
 endfunction
