@@ -96,20 +96,19 @@ endfunction
 
 " Public functions
 
-function! compilastic#compile(flags, reset)
+function! compilastic#compile(flags, load_errors)
   " compile file
   echo 'Compiling...'
-  if a:reset
-    let flags = ''
-  else
-    let flags = s:get_flags()
-  endif
-  let flags = s:expand_all(a:flags) . ' ' . flags
+  let flags = s:expand_all(a:flags) . ' ' . s:get_flags()
   let output = system(s:get_makeprg() . ' ' . flags)
   redraw!
   let status = v:shell_error
   if status
-    echoerr 'Compilation failed.' . output
+    if a:load_errors
+      lexpr output
+    else
+      echoerr 'Compilation failed.' . output
+    endif
   else
     echo 'Compilation successful!'
   endif

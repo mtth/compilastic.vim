@@ -26,8 +26,8 @@ endif
 if !has_key(g:compilastic_default_flags, 'coffee')
   let g:compilastic_default_flags['coffee'] = '%'
 endif
-if !has_key(g:compilastic_default_flags, 'haml-coffee')
-  let g:compilastic_default_flags['haml-coffee'] = '--input % --output {%:r.jst}'
+if !has_key(g:compilastic_default_flags, 'hamlc')
+  let g:compilastic_default_flags['hamlc'] = '--input % --output {%:r.jst}'
 endif
 if !has_key(g:compilastic_default_flags, 'stylus')
   let g:compilastic_default_flags['stylus'] = '%'

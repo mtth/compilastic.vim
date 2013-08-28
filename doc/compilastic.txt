@@ -36,18 +36,46 @@ Compilastic provides the following three commands:
 ------------------------------------------------------------------------------
 2.1 :Compile[!] [<flags>]                                           *:Compile*
 
-Compile file reading modeline to find options.
-If not present, uses defaults.
+Compile file using current compiler and flags from the compilastic modeline. 
+The compilastic modeline has the following format:
+
+<comment_string> c: <flags>
+
+Compilastic performs command line expansion on <flags> (for example, you can 
+use %:h for the folder of the current file). To insert a literal %, prepend it 
+with a backslash.
+
+TODO: explain {} magic.
+
+E.g. if the current compiler is haml and you are editing the following file 
+foo.haml:
+>
+  -# foo.haml
+  !!!
+  %html
+    Hello world!
+  -# c: -t ugly % {%:r.html}
+<
+Then |:Compile| will run the following commmand:
+>
+  haml -t ugly foo.haml foo.html
+<
+If no compilastic modeline is found in the |g:compilastic_upper_limit| lines 
+at the bottom of the file, <flags> will default to the value found in 
+|g:compilastic_default_flags| using the compiler's name as key.
+
+Any <flags> passed to the command will be prepended to the previous flags.
 
 ------------------------------------------------------------------------------
-2.2 :Cinfo [<compiler>]                                               *:Cinfo*
+2.2 :Cinfo                                                            *:Cinfo*
 
-Display information about compiler options.
+Display information about current compiler options. Also prints out the 
+expanded current compilation command (useful for debugging).
 
 ------------------------------------------------------------------------------
-2.3 :Cview                                                            *:Cview*
+2.3 :Cview[!]                                                         *:Cview*
 
-View compiled file.
+View compiled file. With [!], recompile before viewing.
 
 
 ==============================================================================
