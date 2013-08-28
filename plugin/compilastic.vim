@@ -32,6 +32,9 @@ endif
 if !has_key(g:compilastic_default_flags, 'stylus')
   let g:compilastic_default_flags['stylus'] = '%'
 endif
+if !has_key(g:compilastic_default_flags, 'rst2html')
+  let g:compilastic_default_flags['rst2html'] = '% {%:r.html}'
+endif
 
 " Commands
 
