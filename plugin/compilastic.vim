@@ -35,16 +35,20 @@ endif
 if !has_key(g:compilastic_default_flags, 'rst2html')
   let g:compilastic_default_flags['rst2html'] = '% {%:r.html}'
 endif
+if !has_key(g:compilastic_default_flags, 'cc')
+  let g:compilastic_default_flags['cc'] = '% -o {%:r}'
+endif
 
 " Commands
 
 command! -bang -nargs=* Compile call compilastic#compile(<q-args>, <bang>0)
 command! -nargs=0 Cinfo call compilastic#info()
-command! -bang -nargs=0 Cview call compilastic#view(<bang>0)
+command! -bang -nargs=* Crun call compilastic#run(<q-args>, <bang>0)
+command! -bang -nargs=* Cview call compilastic#view(<q-args>, <bang>0)
 
 " Mappings
 
 if g:compilastic_mappings
   nnoremap gc :Compile<cr>
-  nnoremap gC :Cview!<cr>
+  nnoremap gC :call compilastic#run_or_view()<cr>
 endif

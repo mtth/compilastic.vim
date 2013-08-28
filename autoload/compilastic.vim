@@ -71,7 +71,7 @@ function! s:get_filepath()
   " empty if not found
   let matches = matchlist(s:get_modeline(), '{\([^{}]*\)}')
   let path = len(matches) ? matches[1] : '.'
-  if match(path, '[^/]\+\.[^/]\+$') >=# 0
+  if filereadable(path)
     return path
   else
     let filepaths = split(globpath(path, expand('%:t:r') . '.*'), '\n')
@@ -128,7 +128,8 @@ function! compilastic#info()
   endif
 endfunction
 
-function! compilastic#view(refresh)
+function! compilastic#run(arguments, refresh)
+  " run compiled file
   if a:refresh
     let status = compilastic#compile('', 0)
     if status
@@ -136,11 +137,58 @@ function! compilastic#view(refresh)
     endif
   endif
   let filepath = s:get_filepath()
-  if strlen(filepath) && filereadable(filepath)
-    let autoread_save = &autoread
-    let &autoread = 1
-    execute 'edit ' . filepath
-    let &autoread = autoread_save
+  if strlen(filepath)
+    if executable(filepath)
+      echo system(filepath . ' ' . a:arguments)
+    else
+      echoerr 'Compiled file is not executable.'
+    endif
+  else
+    echoerr 'Unable to find compiled executable.'
+  endif
+endfunction
+
+function! compilastic#view(prog, refresh)
+  " view compiled file
+  if a:refresh
+    let status = compilastic#compile('', 0)
+    if status
+      return
+    endif
+  endif
+  let filepath = s:get_filepath()
+  if strlen(filepath)
+    if strlen(a:prog)
+      execute '!' . a:prog . ' ' . filepath
+    else
+      let autoread_save = &autoread
+      let &autoread = 1
+      execute 'edit ' . filepath
+      let &autoread = autoread_save
+    endif
+  else
+    echoerr 'Unable to find compiled file.'
+  endif
+endfunction
+
+function! compilastic#run_or_view()
+  " refresh then run if executable else open in vim
+  let status = compilastic#compile('', 0)
+  if status
+    return
+  else
+    redraw!
+  endif
+  let filepath = s:get_filepath()
+  if strlen(filepath)
+    if executable(filepath)
+      echo system(filepath)
+    else
+      let autoread_save = &autoread
+      let &autoread = 1
+      execute 'edit ' . filepath
+      let &autoread = autoread_save
+    endif
   else
     echoerr 'Unable to find compiled file.'
   endif
