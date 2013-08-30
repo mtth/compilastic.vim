@@ -1,9 +1,11 @@
-Compilastic.vim
-===============
+Compile.vim
+===========
 
 :code:`:make` for busy people.
 
 .. code:: coffeescript
+
+  # Some CoffeeScript code...
 
   hello = () ->
     'howdy'
@@ -21,7 +23,7 @@ Features
 * Execute and view the compiled output quickly using :code:`:Crun` and 
   :code:`:Cview` respectively.
 
-:code:`:help Compilastic` for details and more.
+:code:`:help Compile` for details and more.
 
 
 Installation
@@ -32,7 +34,7 @@ With `pathogen.vim`_:
 .. code:: bash
 
   $ cd ~/.vim/bundle
-  $ git clone https://github.com/mtth/locate.vim
+  $ git clone https://github.com/mtth/compile.vim
 
 Otherwise simply copy the folders into your ``.vim`` directory.
 

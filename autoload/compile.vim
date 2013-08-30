@@ -43,7 +43,7 @@ endfunction
 function! s:get_modeline()
   " also performs command-line expansion
   let last_line = line('$')
-  for line_number in range(last_line, last_line - g:compilastic_upper_limit, -1)
+  for line_number in range(last_line, last_line - g:compile_upper_limit, -1)
     if synIDattr(synIDtrans(synID(line('$'), col('.'), 0)), 'name') == 'Comment'
       let matches = matchlist(getline(line_number), 'make:\s\+\(.*\)$')
       if len(matches)
@@ -51,15 +51,15 @@ function! s:get_modeline()
       endif
     endif
   endfor
-  if has_key(g:compilastic_default_flags, s:get_compiler())
-    return s:expand_all(g:compilastic_default_flags[s:get_compiler()])
+  if has_key(g:compile_default_flags, s:get_compiler())
+    return s:expand_all(g:compile_default_flags[s:get_compiler()])
   else
     return ''
   endif
 endfunction
 
 function! s:get_flags()
-  " recover flags from compilastic modeline in current buffer
+  " recover flags from compile modeline in current buffer
   " format is <comment string>make: <flags>
   " otherwise, return default flags if they exists
   " else, return empty string
@@ -96,7 +96,7 @@ endfunction
 
 " Public functions
 
-function! compilastic#compile(flags, load_errors)
+function! compile#compile(flags, load_errors)
   " compile file
   echo 'Compiling...'
   let flags = s:expand_all(a:flags) . ' ' . s:get_flags()
@@ -115,7 +115,7 @@ function! compilastic#compile(flags, load_errors)
   return status
 endfunction
 
-function! compilastic#info()
+function! compile#info()
   " print information from compiler
   let makeprg = s:get_makeprg()
   if !strlen(makeprg)
@@ -128,10 +128,10 @@ function! compilastic#info()
   endif
 endfunction
 
-function! compilastic#run(arguments, refresh)
+function! compile#run(arguments, refresh)
   " run compiled file
   if a:refresh
-    let status = compilastic#compile('', 0)
+    let status = compile#compile('', 0)
     if status
       return
     else
@@ -153,10 +153,10 @@ function! compilastic#run(arguments, refresh)
   endif
 endfunction
 
-function! compilastic#view(prog, refresh)
+function! compile#view(prog, refresh)
   " view compiled file
   if a:refresh
-    let status = compilastic#compile('', 0)
+    let status = compile#compile('', 0)
     if status
       return
     endif
@@ -176,17 +176,17 @@ function! compilastic#view(prog, refresh)
   endif
 endfunction
 
-function! compilastic#run_or_view()
+function! compile#run_or_view()
   " refresh then run if executable else open in vim
-  if compilastic#compile('', 0)
+  if compile#compile('', 0)
     return
   endif
   let filepath = s:get_filepath()
   if strlen(filepath)
     if executable(filepath)
-      call compilastic#run('', 0)
+      call compile#run('', 0)
     else
-      call compilastic#view('', 0)
+      call compile#view('', 0)
     endif
   else
     echoerr 'Unable to find compiled file at ' . filepath

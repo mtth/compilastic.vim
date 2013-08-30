@@ -1,29 +1,29 @@
-*compilastic.txt*   I compile, you compile.                             v1.0.0
-*Compilastic*
+*compile.txt*   I compile, you compile.                             v1.0.0
+*Compile*
 
 |:make| for busy people.
 
 ==============================================================================
-CONTENTS                                                 *CompilasticContents*
+CONTENTS                                                 *CompileContents*
 
-    1. Intro .............................. |CompilasticIntro|
-    2. Commands ........................ |CompilasticCommands|
+    1. Intro .............................. |CompileIntro|
+    2. Commands ........................ |CompileCommands|
       2.1 |:Compile|
       2.2 |:Cinfo|
       2.3 |:Cview|
       2.4 |:Crun|
-    3. Mappings ........................ |CompilasticMappings|
-    4. Configuration ..................... |CompilasticConfig|
-      4.1  |g:compilastic_default_flags|
-      4.2  |g:compilastic_mappings|
-      4.2  |g:compilastic_upper_limit|
-    5. Changes .......................... |CompilasticChanges|
+    3. Mappings ........................ |CompileMappings|
+    4. Configuration ..................... |CompileConfig|
+      4.1  |g:compile_default_flags|
+      4.2  |g:compile_mappings|
+      4.2  |g:compile_upper_limit|
+    5. Changes .......................... |CompileChanges|
 
 
 ==============================================================================
-1. Intro                                                    *CompilasticIntro*
+1. Intro                                                    *CompileIntro*
 
-Compilastic provides a simple interface to |:make| with the following 
+Compile provides a simple interface to |:make| with the following 
 features:
 
 * Store global and file specific compiling options to avoid having to enter 
@@ -35,19 +35,19 @@ features:
 
 
 ==============================================================================
-2. Commands                                              *CompilasticCommands*
+2. Commands                                              *CompileCommands*
 
-Compilastic provides the following four commands:
+Compile provides the following four commands:
 
 ------------------------------------------------------------------------------
 2.1 :Compile[!] [<flags>]                                           *:Compile*
 
-Compile file using current compiler and flags from the compilastic modeline. 
-The compilastic modeline has the following format:
+Compile file using current compiler and flags from the compile modeline. 
+The compile modeline has the following format:
 >
   <commentstring> make: <flags>
 <
-Compilastic performs command line expansion on <flags> (for example, you can 
+Compile performs command line expansion on <flags> (for example, you can 
 use %:h for the folder of the current file). To insert a literal %, prepend it 
 with a backslash. E.g. if the current compiler is HAML and you are editing the 
 following file foo.haml:
@@ -62,9 +62,9 @@ Then |:Compile| will run the following commmand:
 >
   haml -t ugly foo.haml foo.html
 <
-If no compilastic modeline is found in the |g:compilastic_upper_limit| lines 
+If no compile modeline is found in the |g:compile_upper_limit| lines 
 at the bottom of the file, <flags> will default to the value found in 
-|g:compilastic_default_flags| using the compiler's name as key.
+|g:compile_default_flags| using the compiler's name as key.
 
 Any <flags> passed to |:Compile| will be prepended to the modeline flags.
 
@@ -85,8 +85,8 @@ browser on a mac:
   :Cview open
 <
 
-In order for this command to work, compilastic has to know where the compiled 
-file is. By default compilastic will look in the current working directory for 
+In order for this command to work, compile has to know where the compiled 
+file is. By default compile will look in the current working directory for 
 a file with the same root as the one being edited. You can set the output file 
 or directory by prepending it with & in the modeline. E.g. the following file:
 >
@@ -96,7 +96,7 @@ or directory by prepending it with & in the modeline. E.g. the following file:
     Hello world!
   -# make: % &%:r.html
 <
-This modeline tells compilastic that the compiled file can be found at 
+This modeline tells compile that the compiled file can be found at 
 foo.html. Note that if several & are used in the modeline, the first will be 
 used to determine the output location.
 
@@ -109,10 +109,10 @@ running (cf. |:Cview| for setting the path to the compiled file).
 
 
 ==============================================================================
-3. Mappings                                              *CompilasticMappings*
+3. Mappings                                              *CompileMappings*
 
 
-These mappings can be disabled by setting the |g:compilastic_mappings| option 
+These mappings can be disabled by setting the |g:compile_mappings| option 
 to 0.
 
 ------------------------------------------------------------------------------
@@ -128,34 +128,34 @@ Compile file then:
 
 
 ==============================================================================
-4. Configuration                                           *CompilasticConfig*
+4. Configuration                                           *CompileConfig*
 
-You can tame Compilastic by changing the following options.
+You can tame Compile by changing the following options.
 
 ------------------------------------------------------------------------------
-4.1 g:compilastic_default_flags                  *g:compilastic_default_flags*
+4.1 g:compile_default_flags                  *g:compile_default_flags*
 
-Dictionary of compilation flags to use if no compilastic modeline if found in 
+Dictionary of compilation flags to use if no compile modeline if found in 
 the current file. The dictionary is indexed by compiler name. To add your own 
 or edit the current values, simply create and assign values to it directly:
 >
-  let g:compilastic_default_flags = {'my_compiler': '% &%:h/../build/'}
+  let g:compile_default_flags = {'my_compiler': '% &%:h/../build/'}
 <
 
 ------------------------------------------------------------------------------
-4.2 g:compilastic_mappings = 1                        *g:compilastic_mappings*
+4.2 g:compile_mappings = 1                        *g:compile_mappings*
 
 Create |gc| and |gC| mappings. Set to 0 to disable mappings.
 
 ------------------------------------------------------------------------------
-4.3 g:compilastic_upper_limit = 5                  *g:compilastic_upper_limit*
+4.3 g:compile_upper_limit = 5                  *g:compile_upper_limit*
 
 Maximum number of lines from bottom which will be parsed to find the 
-compilastic modeline.
+compile modeline.
 
 
 ==============================================================================
-5. Changes                                                *CompilasticChanges*
+5. Changes                                                *CompileChanges*
 
 v1.0.0 (?)
   * Initial stable release.
