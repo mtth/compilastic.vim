@@ -21,22 +21,22 @@ endif
 " Default compilation flags
 
 if !has_key(g:compilastic_default_flags, 'haml')
-  let g:compilastic_default_flags['haml'] = '% {%:r.html}'
+  let g:compilastic_default_flags['haml'] = '% &%:r.html'
 endif
 if !has_key(g:compilastic_default_flags, 'coffee')
   let g:compilastic_default_flags['coffee'] = '%'
 endif
 if !has_key(g:compilastic_default_flags, 'hamlc')
-  let g:compilastic_default_flags['hamlc'] = '--input % --output {%:r.jst}'
+  let g:compilastic_default_flags['hamlc'] = '--input % --output &%:r.jst'
 endif
 if !has_key(g:compilastic_default_flags, 'stylus')
   let g:compilastic_default_flags['stylus'] = '%'
 endif
 if !has_key(g:compilastic_default_flags, 'rst2html')
-  let g:compilastic_default_flags['rst2html'] = '% {%:r.html}'
+  let g:compilastic_default_flags['rst2html'] = '% &%:r.html'
 endif
 if !has_key(g:compilastic_default_flags, 'cc')
-  let g:compilastic_default_flags['cc'] = '% -o {%:r}'
+  let g:compilastic_default_flags['cc'] = '% -o &%:r'
 endif
 
 " Commands

@@ -45,7 +45,7 @@ function! s:get_modeline()
   let last_line = line('$')
   for line_number in range(last_line, last_line - g:compilastic_upper_limit, -1)
     if synIDattr(synIDtrans(synID(line('$'), col('.'), 0)), 'name') == 'Comment'
-      let matches = matchlist(getline(line_number), 'c:\s\+\(.*\)$')
+      let matches = matchlist(getline(line_number), 'make:\s\+\(.*\)$')
       if len(matches)
         return s:expand_all(matches[1])
       endif
@@ -60,16 +60,16 @@ endfunction
 
 function! s:get_flags()
   " recover flags from compilastic modeline in current buffer
-  " format is <comment string>c: <flags>
+  " format is <comment string>make: <flags>
   " otherwise, return default flags if they exists
   " else, return empty string
-  return substitute(s:get_modeline(), '{\([^{}]*\)}', '\=submatch(1)', '')
+  return substitute(s:get_modeline(), '&', '', 'g')
 endfunction
 
 function! s:get_filepath()
   " get filepath from flags
   " empty if not found
-  let matches = matchlist(s:get_modeline(), '{\([^{}]*\)}')
+  let matches = matchlist(s:get_modeline(), '&\(\S\+\)')
   let path = len(matches) ? matches[1] : '.'
   if filereadable(path)
     return path

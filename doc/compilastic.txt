@@ -1,6 +1,7 @@
 *compilastic.txt*   I compile, you compile.                             v1.0.0
 *Compilastic*
 
+|:make| for busy people.
 
 ==============================================================================
 CONTENTS                                                 *CompilasticContents*
@@ -10,26 +11,33 @@ CONTENTS                                                 *CompilasticContents*
       2.1 |:Compile|
       2.2 |:Cinfo|
       2.3 |:Cview|
+      2.4 |:Crun|
     3. Mappings ........................ |CompilasticMappings|
     4. Configuration ..................... |CompilasticConfig|
-      4.1  |g:compilastic_highlight|
-      4.2  |g:compilastic_initial_mark|
+      4.1  |g:compilastic_default_flags|
+      4.2  |g:compilastic_mappings|
+      4.2  |g:compilastic_upper_limit|
     5. Changes .......................... |CompilasticChanges|
 
 
 ==============================================================================
 1. Intro                                                    *CompilasticIntro*
 
-Lisp, Lisp, Lisp Machine,
-Lisp Machine is Fun.
-Lisp, Lisp, Lisp Machine,
-Fun for everyone.
+Compilastic provides a simple interface to |:make| with the following 
+features:
+
+* Store global and file specific compiling options to avoid having to enter 
+  them every time (respectively in your .vimrc and in the corresponding file).
+* Compile your file silently using |:Compile| so that you can stay focused on 
+  the file being edited, no more distracting screen flickering.
+* Execute and view the compiled output quickly using |:Crun| and |:Cview| 
+  respectively.
 
 
 ==============================================================================
 2. Commands                                              *CompilasticCommands*
 
-Compilastic provides the following three commands:
+Compilastic provides the following four commands:
 
 ------------------------------------------------------------------------------
 2.1 :Compile[!] [<flags>]                                           *:Compile*
@@ -37,22 +45,18 @@ Compilastic provides the following three commands:
 Compile file using current compiler and flags from the compilastic modeline. 
 The compilastic modeline has the following format:
 >
-<comment_string> c: <flags>
+  <commentstring> make: <flags>
 <
 Compilastic performs command line expansion on <flags> (for example, you can 
 use %:h for the folder of the current file). To insert a literal %, prepend it 
-with a backslash.
-
-TODO: explain {} magic.
-
-E.g. if the current compiler is haml and you are editing the following file 
-foo.haml:
+with a backslash. E.g. if the current compiler is HAML and you are editing the 
+following file foo.haml:
 >
   -# foo.haml
   !!!
   %html
     Hello world!
-  -# c: -t ugly % {%:r.html}
+  -# make: -f html4 % %:r.html
 <
 Then |:Compile| will run the following commmand:
 >
@@ -62,7 +66,7 @@ If no compilastic modeline is found in the |g:compilastic_upper_limit| lines
 at the bottom of the file, <flags> will default to the value found in 
 |g:compilastic_default_flags| using the compiler's name as key.
 
-Any <flags> passed to the command will be prepended to the previous flags.
+Any <flags> passed to |:Compile| will be prepended to the modeline flags.
 
 ------------------------------------------------------------------------------
 2.2 :Cinfo                                                            *:Cinfo*
@@ -71,9 +75,37 @@ Display information about current compiler options. Also prints out the
 expanded current compilation command (useful for debugging).
 
 ------------------------------------------------------------------------------
-2.3 :Cview[!]                                                         *:Cview*
+2.3 :Cview[!] [<prog>]                                                *:Cview*
 
 View compiled file. With [!], recompile before viewing.
+
+If <prog> is specified, open with that program instead. E.g. to view output in 
+browser on a mac:
+>
+  :Cview open
+<
+
+In order for this command to work, compilastic has to know where the compiled 
+file is. By default compilastic will look in the current working directory for 
+a file with the same root as the one being edited. You can set the output file 
+or directory by prepending it with & in the modeline. E.g. the following file:
+>
+  -# foo.haml
+  !!!
+  %html
+    Hello world!
+  -# make: % &%:r.html
+<
+This modeline tells compilastic that the compiled file can be found at 
+foo.html. Note that if several & are used in the modeline, the first will be 
+used to determine the output location.
+
+
+------------------------------------------------------------------------------
+2.4 :Crun[!] [<args>]                                                  *:Crun*
+
+Run compiled file, passing any <args> as arguments. With [!], recompile before 
+running (cf. |:Cview| for setting the path to the compiled file).
 
 
 ==============================================================================
@@ -92,7 +124,7 @@ Compile file.
 Compile file then:
 
 * run compiled file if it is executable (e.g. when compiling C)
-* view compiled file otherwise (e.g. HAML)
+* view compiled file otherwise (e.g. when compiling HAML)
 
 
 ==============================================================================
@@ -100,17 +132,26 @@ Compile file then:
 
 You can tame Compilastic by changing the following options.
 
-
 ------------------------------------------------------------------------------
 4.1 g:compilastic_default_flags                  *g:compilastic_default_flags*
 
-TODO.
-
+Dictionary of compilation flags to use if no compilastic modeline if found in 
+the current file. The dictionary is indexed by compiler name. To add your own 
+or edit the current values, simply create and assign values to it directly:
+>
+  let g:compilastic_default_flags = {'my_compiler': '% &%:h/../build/'}
+<
 
 ------------------------------------------------------------------------------
-4.2 g:compilastic_mappings                            *g:compilastic_mappings*
+4.2 g:compilastic_mappings = 1                        *g:compilastic_mappings*
 
-TODO.
+Create |gc| and |gC| mappings. Set to 0 to disable mappings.
+
+------------------------------------------------------------------------------
+4.3 g:compilastic_upper_limit = 5                  *g:compilastic_upper_limit*
+
+Maximum number of lines from bottom which will be parsed to find the 
+compilastic modeline.
 
 
 ==============================================================================
