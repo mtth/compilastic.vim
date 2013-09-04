@@ -9,34 +9,14 @@ endif
 if !exists('g:compile_upper_limit')
   let g:compile_upper_limit = 5
 endif
-
 if !exists('g:compile_mappings')
   let g:compile_mappings = 1
 endif
-
 if !exists('g:compile_default_flags')
   let g:compile_default_flags = {}
 endif
-
-" Default compilation flags
-
-if !has_key(g:compile_default_flags, 'haml')
-  let g:compile_default_flags['haml'] = '% &%:r.html'
-endif
-if !has_key(g:compile_default_flags, 'coffee')
-  let g:compile_default_flags['coffee'] = '%'
-endif
-if !has_key(g:compile_default_flags, 'hamlc')
-  let g:compile_default_flags['hamlc'] = '--input % --output &%:r.jst'
-endif
-if !has_key(g:compile_default_flags, 'stylus')
-  let g:compile_default_flags['stylus'] = '%'
-endif
-if !has_key(g:compile_default_flags, 'rst2html')
-  let g:compile_default_flags['rst2html'] = '% &%:r.html'
-endif
-if !has_key(g:compile_default_flags, 'cc')
-  let g:compile_default_flags['cc'] = '% -o &%:r'
+if !exists('g:compile_transient_view')
+  let g:compile_transient_view = 1
 endif
 
 " Commands

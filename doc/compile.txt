@@ -16,7 +16,8 @@ CONTENTS                                                 *CompileContents*
     4. Configuration ..................... |CompileConfig|
       4.1  |g:compile_default_flags|
       4.2  |g:compile_mappings|
-      4.2  |g:compile_upper_limit|
+      4.3  |g:compile_upper_limit|
+      4.4  |g:compile_transient_view|
     5. Changes .......................... |CompileChanges|
 
 
@@ -152,6 +153,11 @@ Create |gc| and |gC| mappings. Set to 0 to disable mappings.
 
 Maximum number of lines from bottom which will be parsed to find the 
 compile modeline.
+
+------------------------------------------------------------------------------
+4.4 g:compile_transient_view = 1                    *g:compile_transient_view*
+
+Unload compiled file buffer when leaving it.
 
 
 ==============================================================================

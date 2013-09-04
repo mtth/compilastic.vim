@@ -166,10 +166,12 @@ function! compile#view(prog, refresh)
     if strlen(a:prog)
       execute '!' . a:prog . ' ' . filepath
     else
-      let autoread_save = &autoread
-      let &autoread = 1
       execute 'edit ' . filepath
-      let &autoread = autoread_save
+      if g:compile_transient_view
+        autocmd! BufWinLeave <buffer> execute 'bdel ' . expand('<abuf>')
+      else
+        setlocal autoread
+      endif
     endif
   else
     echoerr 'Unable to find compiled file at ' . filepath
