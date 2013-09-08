@@ -43,8 +43,8 @@ Compile provides the following four commands:
 ------------------------------------------------------------------------------
 2.1 :Compile[!] [<flags>]                                           *:Compile*
 
-Compile file using current compiler and flags from the compile modeline. 
-The compile modeline has the following format:
+Compile file using current compiler and flags from the compile 'makeline'. The 
+compile makeline has the following format:
 >
   <commentstring> make: <flags>
 <
@@ -63,11 +63,11 @@ Then |:Compile| will run the following commmand:
 >
   haml -t ugly foo.haml foo.html
 <
-If no compile modeline is found in the |g:compile_upper_limit| lines 
-at the bottom of the file, <flags> will default to the value found in 
+If no compile makeline is found in the |g:compile_upper_limit| lines at the 
+bottom of the file, <flags> will default to the value found in 
 |g:compile_default_flags| using the compiler's name as key.
 
-Any <flags> passed to |:Compile| will be prepended to the modeline flags.
+Any <flags> passed to |:Compile| will be prepended to the makeline flags.
 
 ------------------------------------------------------------------------------
 2.2 :Cinfo                                                            *:Cinfo*
@@ -89,7 +89,7 @@ browser on a mac:
 In order for this command to work, compile has to know where the compiled 
 file is. By default compile will look in the current working directory for 
 a file with the same root as the one being edited. You can set the output file 
-or directory by prepending it with & in the modeline. E.g. the following file:
+or directory by prepending it with & in the makeline. E.g. the following file:
 >
   -# foo.haml
   !!!
@@ -97,9 +97,9 @@ or directory by prepending it with & in the modeline. E.g. the following file:
     Hello world!
   -# make: % &%:r.html
 <
-This modeline tells compile that the compiled file can be found at 
-foo.html. Note that if several & are used in the modeline, the first will be 
-used to determine the output location.
+This makeline tells compile that the compiled file can be found at foo.html. 
+Note that if several & are used in the makeline, the first will be used to 
+determine the output location.
 
 
 ------------------------------------------------------------------------------
@@ -136,9 +136,9 @@ You can tame Compile by changing the following options.
 ------------------------------------------------------------------------------
 4.1 g:compile_default_flags                  *g:compile_default_flags*
 
-Dictionary of compilation flags to use if no compile modeline if found in 
-the current file. The dictionary is indexed by compiler name. To add your own 
-or edit the current values, simply create and assign values to it directly:
+Dictionary of compilation flags to use if no compile makeline if found in the 
+current file. The dictionary is indexed by compiler name. To add your own or 
+edit the current values, simply create and assign values to it directly:
 >
   let g:compile_default_flags = {'my_compiler': '% &%:h/../build/'}
 <
@@ -151,8 +151,8 @@ Create |gc| and |gC| mappings. Set to 0 to disable mappings.
 ------------------------------------------------------------------------------
 4.3 g:compile_upper_limit = 5                  *g:compile_upper_limit*
 
-Maximum number of lines from bottom which will be parsed to find the 
-compile modeline.
+Maximum number of lines from bottom which will be parsed to find the compile 
+makeline.
 
 ------------------------------------------------------------------------------
 4.4 g:compile_transient_view = 1                    *g:compile_transient_view*

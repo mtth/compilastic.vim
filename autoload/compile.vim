@@ -44,11 +44,9 @@ function! s:get_modeline()
   " also performs command-line expansion
   let last_line = line('$')
   for line_number in range(last_line, last_line - g:compile_upper_limit, -1)
-    if synIDattr(synIDtrans(synID(line('$'), col('.'), 0)), 'name') == 'Comment'
-      let matches = matchlist(getline(line_number), 'make:\s\+\(.*\)$')
-      if len(matches)
-        return s:expand_all(matches[1])
-      endif
+    let matches = matchlist(getline(line_number), 'make:\s\+\(.*\)$')
+    if len(matches)
+      return s:expand_all(matches[1])
     endif
   endfor
   if has_key(g:compile_default_flags, s:get_compiler())
