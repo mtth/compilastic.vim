@@ -98,14 +98,18 @@ function! compile#compile(flags, load_errors)
   " compile file
   echo 'Compiling...'
   let flags = s:expand_all(a:flags) . ' ' . s:get_flags()
+  let shellredir_save = &shellredir
+  let &shellredir = '>%s 2>&1'
   let output = system(s:get_makeprg() . ' ' . flags)
+  let &shellredir = shellredir_save
   redraw!
   let status = v:shell_error
   if status
     if a:load_errors
       lexpr output
     else
-      echoerr 'Compilation failed.' . output
+      echoerr 'Compilation failed:'
+      echo output
     endif
   else
     echo 'Compilation successful!'
